@@ -1,13 +1,4 @@
-var gulp = require('gulp'),                           //
-    
-/*
-    
-    
-    jshint = require('gulp-jshint'),
-    htmlhint = require("gulp-htmlhint"),
-    
-    
-*/
+var gulp = require('gulp'),
     concat = require('gulp-concat'),
     browserify = require('browserify'),
     sass = require('gulp-ruby-sass'),
@@ -18,23 +9,13 @@ var gulp = require('gulp'),                           //
     jade = require('gulp-jade'),
     runSequence = require('run-sequence'),
     browserSync = require('browser-sync').create(),
-    source = require('vinyl-source-stream');
-
-
-var paths = {
-      scripts: ['src/js/**/*.js'],
-      styles: ['src/css/**/*.scss'],
-      html: ['src/templates/**/*.jade'], 
-      src: ['./src/'],
-      dist: ['./dist/']
-};
-
-
-
+    source = require('vinyl-source-stream'),
+    htmlhint = require("gulp-htmlhint"), 
+    jshint = require('gulp-jshint');
 
 
 gulp.task('clean', function() {
- return gulp.src(paths.dist)
+ return gulp.src('./dist/')
  .pipe(clean());
 });
 
@@ -57,58 +38,60 @@ gulp.task('styles', function() {
     .pipe(browserSync.stream());
 });
 
+gulp.task('scripts', function() {
+  return browserify('./src/js/scripts.js')
+    .bundle()
+    .pipe(plumber())
+    .pipe(source('scripts.js'))
+    .pipe(gulp.dest('./dist/js/'))
+    .pipe(browserSync.stream());
+});
+
 gulp.task('connect', function() {
   browserSync.init({
-      server: {
-          baseDir: "./dist"
-      },
-      browser: "google chrome",
-      notify : false
+    server: {
+      baseDir: "./dist"
+    },
+    browser: "google chrome",
+    notify : false
   });
 });
 
+gulp.task('jshint', function() {
+  gulp.src(['./src/js/**/*.js', '!./src/js/libs/jquery.js', '!./src/js/libs/utils.js'])
+    .pipe(jshint('.jshintrc'))
+    .pipe(jshint.reporter('jshint-stylish'))
+});
 
-gulp.task('scripts', function() {
-    return browserify('./src/js/scripts.js')
-        .bundle()
-        .pipe(plumber())
-        //Pass desired output filename to vinyl-source-stream
-        .pipe(source('scripts.js'))
-        // Start piping stream to tasks!
-        .pipe(gulp.dest('./dist/js/'))
-        .pipe(browserSync.stream());
+gulp.task('htmlhint',function() {
+  return gulp.src('./dist/*.html')
+    .pipe(htmlhint('.htmlhintrc'))
+    .pipe(htmlhint.reporter('jshint-stylish'));
 });
 
 
 
 
+
+
+/*********************************************************/
 
 gulp.task('default', ['clean'], function() {
-  console.log('DEFAULT!');
+  console.log('TODO : write usage');
 });
-
 
 gulp.task('copy', function() {
-  //gulp.src('src/css/').pipe(gulp.dest('dist'));
   gulp.src('./src/js/libs/*.js').pipe(gulp.dest('./dist/js/libs'));
-  //gulp.src('src/templates/').pipe(gulp.dest('dist'));
 });
 
-
-
-
 gulp.task('watch', function() {
-  gulp.watch('./src/templates/**/*.jade', ['templates']);
-  gulp.watch('./src/js/**/*.js', ['scripts']);
+  gulp.watch('./src/templates/**/*.jade', ['templates', 'htmlhint']);
+  gulp.watch('./src/js/**/*.js', ['scripts', 'jshint']);
   gulp.watch(['./src/css/*/*/*/*.scss', './src/css/*/*/*.scss', './src/css/*/*.scss','./src/css/*.scss'],['styles']);
 });
 
-
-
-
-
 gulp.task('dev', function() {
-  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['watch']);
+  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['templates', 'htmlhint'], ['watch']);
 });
 
 
