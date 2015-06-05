@@ -1,0 +1,23 @@
+{
+    "name" : "justFormAdvanced",
+    "version" : "0.1.0",
+    "author" : "Andrea Usseglio Gaudi",
+    "private" : true,
+    "devDependencies" : {
+      "gulp" : "*",
+      "gulp-ruby-sass" : "*",
+      "gulp-plumber" : "*",
+      "browser-sync" : "*",
+      "gulp-jshint" : "*",
+      "jshint-stylish" : "*",
+      "gulp-htmlhint" : "*",
+      "gulp-connect" : "*",
+      "gulp-autoprefixer" : "*",
+      "gulp-concat" : "*",
+      "browserify" : "*",
+      "gulp-clean" : "*",
+      "gulp-jade" : "*",
+      "run-sequence": "*",
+      "vinyl-source-stream" : "*"
+    }
+}

@@ -1,0 +1,16 @@
+doctype
+html
+	head
+		title Jade
+		link(rel="stylesheet", href="css/screen.css")
+		script(src="js/libs/jquery.js")
+		script(src="js/libs/utils.js")
+		script(src="js/scripts.js")
+	body
+
+		.container
+			include ./partials/header.jade
+
+			block content
+
+			include ./partials/footer.jade
