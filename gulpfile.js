@@ -17,8 +17,8 @@ var gulp          = require('gulp'),
     jscs          = require('gulp-jscs');
 
 gulp.task('clean', function() {
- return gulp.src('./dist/')
- .pipe(clean());
+  return gulp.src('./dist/')
+    .pipe(clean());
 });
 
 gulp.task('templates', function() {
@@ -30,7 +30,7 @@ gulp.task('templates', function() {
 });
 
 gulp.task('styles', function() {
-    return sass('./src/css/screen.scss', { style: 'expanded' })
+  return sass('./src/css/screen.scss', { style: 'expanded' })
     .pipe(plumber())
     .pipe(autoprefixer({
       browsers: ['last 2 versions'],
@@ -90,6 +90,10 @@ gulp.task('default', function() {
 
 });
 
+
+
+//Private
+
 gulp.task('copy', function() {
   gulp.src('./src/js/libs/*.js').pipe(gulp.dest('./dist/js/libs'));
 });
@@ -99,6 +103,10 @@ gulp.task('watch', function() {
   gulp.watch('./src/js/**/*.js', ['scripts', 'jshint-jscs']);
   gulp.watch(['./src/css/*/*/*/*.scss', './src/css/*/*/*.scss', './src/css/*/*.scss','./src/css/*.scss'],['styles']);
 });
+
+
+
+//Public
 
 gulp.task('dev', function() {
   runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['templates', 'htmlhint', 'jshint-jscs'], ['watch']);
