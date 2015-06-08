@@ -1,18 +1,20 @@
-var gulp = require('gulp'),
-    concat = require('gulp-concat'),
-    browserify = require('browserify'),
-    sass = require('gulp-ruby-sass'),
-    autoprefixer = require('gulp-autoprefixer'),
-    connect = require('gulp-connect'),
-    plumber = require('gulp-plumber'),
-    clean = require('gulp-clean'),
-    jade = require('gulp-jade'),
-    runSequence = require('run-sequence'),
-    browserSync = require('browser-sync').create(),
-    source = require('vinyl-source-stream'),
-    htmlhint = require("gulp-htmlhint"), 
-    jshint = require('gulp-jshint');
-
+var gulp          = require('gulp'),
+    chalk         = require('chalk'),
+    concat        = require('gulp-concat'),
+    browserify    = require('browserify'),
+    sass          = require('gulp-ruby-sass'),
+    autoprefixer  = require('gulp-autoprefixer'),
+    connect       = require('gulp-connect'),
+    plumber       = require('gulp-plumber'),
+    clean         = require('gulp-clean'),
+    jade          = require('gulp-jade'),
+    runSequence   = require('run-sequence'),
+    browserSync   = require('browser-sync').create(),
+    source        = require('vinyl-source-stream'),
+    htmlhint      = require("gulp-htmlhint"), 
+    jshint        = require('gulp-jshint'),
+    minifyCss     = require('gulp-minify-css'),
+    jscs          = require('gulp-jscs');
 
 gulp.task('clean', function() {
  return gulp.src('./dist/')
@@ -34,6 +36,7 @@ gulp.task('styles', function() {
       browsers: ['last 2 versions'],
       cascade: false
     }))
+    .pipe(minifyCss({compatibility: 'ie8'}))
     .pipe(gulp.dest('dist/css'))
     .pipe(browserSync.stream());
 });
@@ -57,27 +60,34 @@ gulp.task('connect', function() {
   });
 });
 
-gulp.task('jshint', function() {
-  gulp.src(['./src/js/**/*.js', '!./src/js/libs/jquery.js', '!./src/js/libs/utils.js'])
+gulp.task('jshint-jscs', function() {
+  gulp.src(['./src/js/**/*.js', '!./src/js/libs/**/*.js'])
+    .pipe(plumber())
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('jshint-stylish'))
+    .pipe(jscs());
 });
 
 gulp.task('htmlhint',function() {
   return gulp.src('./dist/*.html')
+    .pipe(plumber())
     .pipe(htmlhint('.htmlhintrc'))
     .pipe(htmlhint.reporter('jshint-stylish'));
 });
 
 
 
-
-
-
 /*********************************************************/
 
-gulp.task('default', ['clean'], function() {
-  console.log('TODO : write usage');
+gulp.task('default', function() {
+  console.log('');
+  console.log(chalk.blue('justForkAdvanced'));
+  console.log(chalk.blue('usage :'));
+  console.log(chalk.blue('  $> gulp dev        -> start dev server'));
+  console.log(chalk.blue('  $> gulp build      -> build dist folder'));
+  console.log(chalk.blue('  $> gulp cleanDist  -> clean dist folder'));
+  console.log('');
+
 });
 
 gulp.task('copy', function() {
@@ -86,12 +96,20 @@ gulp.task('copy', function() {
 
 gulp.task('watch', function() {
   gulp.watch('./src/templates/**/*.jade', ['templates', 'htmlhint']);
-  gulp.watch('./src/js/**/*.js', ['scripts', 'jshint']);
+  gulp.watch('./src/js/**/*.js', ['scripts', 'jshint-jscs']);
   gulp.watch(['./src/css/*/*/*/*.scss', './src/css/*/*/*.scss', './src/css/*/*.scss','./src/css/*.scss'],['styles']);
 });
 
 gulp.task('dev', function() {
-  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['templates', 'htmlhint'], ['watch']);
+  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['templates', 'htmlhint', 'jshint-jscs'], ['watch']);
+});
+
+gulp.task('build', function() {
+  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts'], ['templates', 'htmlhint', 'jshint-jscs']);
+});
+
+gulp.task('cleanDist', function() {
+  runSequence('clean');
 });
 
 

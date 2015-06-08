@@ -18,6 +18,9 @@
       "gulp-clean" : "*",
       "gulp-jade" : "*",
       "run-sequence": "*",
-      "vinyl-source-stream" : "*"
+      "vinyl-source-stream" : "*",
+      "gulp-minify-css" : "*",
+      "gulp-jscs" : "*",
+      "chalk" : "*"
     }
 }
