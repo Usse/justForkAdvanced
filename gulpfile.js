@@ -14,7 +14,9 @@ var gulp          = require('gulp'),
     htmlhint      = require("gulp-htmlhint"), 
     jshint        = require('gulp-jshint'),
     minifyCss     = require('gulp-minify-css'),
-    jscs          = require('gulp-jscs');
+    jscs          = require('gulp-jscs'),
+    jasmine       = require('gulp-jasmine'),
+    scsslint      = require('gulp-scss-lint');
 
 gulp.task('clean', function() {
   return gulp.src('./dist/')
@@ -75,6 +77,21 @@ gulp.task('htmlhint',function() {
     .pipe(htmlhint.reporter('jshint-stylish'));
 });
 
+gulp.task('scss-lint', function() {
+  gulp.src('./src/css/screen.scss')
+    .pipe(plumber())
+    .pipe(scsslint());
+});
+
+gulp.task('jasmine', function () {
+  return gulp.src('./tests/spec/SumSpec.js')
+    .pipe(plumber())
+    .pipe(jasmine({
+      'endless' : true
+    }));
+});
+
+
 
 
 /*********************************************************/
@@ -100,8 +117,9 @@ gulp.task('copy', function() {
 
 gulp.task('watch', function() {
   gulp.watch('./src/templates/**/*.jade', ['templates', 'htmlhint']);
-  gulp.watch('./src/js/**/*.js', ['scripts', 'jshint-jscs']);
+  gulp.watch('./src/js/**/*.js', ['scripts', 'jshint-jscs', 'jasmine']);
   gulp.watch(['./src/css/*/*/*/*.scss', './src/css/*/*/*.scss', './src/css/*/*.scss','./src/css/*.scss'],['styles']);
+  gulp.watch(['./src/css/**/*.scss','!./src/css/libs/**/*.scss'],['scss-lint']);
 });
 
 
@@ -109,11 +127,11 @@ gulp.task('watch', function() {
 //Public
 
 gulp.task('dev', function() {
-  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts', 'connect'], ['templates', 'htmlhint', 'jshint-jscs'], ['watch']);
+  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts'], ['templates', 'htmlhint', 'jshint-jscs', 'scss-lint'], ['watch', 'connect']);
 });
 
 gulp.task('build', function() {
-  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts'], ['templates', 'htmlhint', 'jshint-jscs']);
+  runSequence('clean', ['copy'], ['templates', 'styles', 'scripts'], ['templates', 'htmlhint', 'jshint-jscs', 'scss-lint'],['jasmine']);
 });
 
 gulp.task('cleanDist', function() {

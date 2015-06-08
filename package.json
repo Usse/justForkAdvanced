@@ -21,6 +21,8 @@
       "vinyl-source-stream" : "*",
       "gulp-minify-css" : "*",
       "gulp-jscs" : "*",
-      "chalk" : "*"
+      "chalk" : "*",
+      "gulp-jasmine" : "*",
+      "gulp-scss-lint" : "*"
     }
 }
