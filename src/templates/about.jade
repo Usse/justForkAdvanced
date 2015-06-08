@@ -2,4 +2,12 @@ extends ./_layout.jade
 
 
 block content
-	h1 wooo about!
+
+  - var activePage = 'about'  
+  include ./partials/header.jade
+
+  h1 Lorem ipsum dolor.
+    i.fa.fa-simplybuilt
+
+
+  include ./partials/footer.jade

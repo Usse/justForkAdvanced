@@ -1,11 +1,9 @@
+
 header
 	ul
 		li
-			a(href="index.html") Index
+			a(href="index.html", class=(activePage === 'home' ? 'active' : '')) Home
 		li
-			a(href="about.html") About
-		li lorem
-		li ipsum
-		li dolor
-		li sit
-		
+			a(href="about.html", class=(activePage === 'about' ? 'active' : '')) About
+
+			

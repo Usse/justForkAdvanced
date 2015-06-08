@@ -2,4 +2,10 @@ extends ./_layout.jade
 
 
 block content
-	h1 wooo index!
+
+  - var activePage = 'home'
+  include ./partials/header.jade
+
+  h1  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Velit, obcaecati!
+
+  include ./partials/footer.jade

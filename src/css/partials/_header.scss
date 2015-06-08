@@ -1,0 +1,31 @@
+$white : #fff;
+$black : #000;
+$primary-color : #bad455;
+
+header {
+
+  ul {
+    list-style-type: none;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  li {
+    float: left;
+  
+    a {
+      background: $primary-color;
+      color: $white;
+      display: block;
+      padding: 10px 15px;
+      transition: 400ms background;
+
+      &:hover, 
+      &.active {
+        background: $black;
+        color: $white;
+        text-decoration: none;
+      }
+    }
+  }
+}
