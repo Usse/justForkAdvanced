@@ -8,7 +8,7 @@ describe("Math basic: Sum", function() {
 
   var math;
   beforeEach(function() {
-    math = require('../../src/js/modules/sum.js');
+    math = require('../../../src/js/modules/sum.js');
   });
 
   it("4 + 5 should be 9", function() {
@@ -26,7 +26,7 @@ describe("Math basic: Sub", function() {
 
   var math;
   beforeEach(function() {
-    math = require('../../src/js/modules/sum.js');
+    math = require('../../../src/js/modules/sum.js');
   });
 
   it("4 - 5 should be -1", function() {

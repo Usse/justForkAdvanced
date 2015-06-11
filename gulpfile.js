@@ -87,7 +87,7 @@ gulp.task('scss-lint', function() {
 });
 
 gulp.task('jasmine', function () {
-  return gulp.src('./tests/spec/SumSpec.js')
+  return gulp.src('./tests/jasmine/spec/SumSpec.js')
     .pipe(plumber())
     .pipe(jasmine());
 });
